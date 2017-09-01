@@ -13,14 +13,15 @@ DURATION = 1
 
 # VIEW METHODS
 def show_note(note, octave):
-    constructed_note = note + ":" + octave
+    constructed_note = note + octave
     display.scroll(constructed_note)
-
 
 
 # CONTROLLER METHODS
 def play_note(note, octave, duration):
     constructed_note = str(note) + str(octave) + ":" + str(duration)
+
+    show_note(note, octave)
     music.play(constructed_note)
 
 def up_octave(value):
@@ -35,6 +36,7 @@ def up_duration(value):
 def down_duration(value):
     DURATION -= value
 
+music.set_tempo(ticks=15, bpm=240)
 
 while True:
     # sets up note pins
@@ -69,7 +71,6 @@ while True:
         up_octave(1)
     elif button_a.is_pressed() and button_b.is_pressed():
         display.show(OCTAVE)
-
     else:
         display.show(Image.ASLEEP)
 
