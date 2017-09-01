@@ -9,7 +9,8 @@ import music
 # starting octave
 OCTAVE = 4
 # starting duration
-DURATION = 1
+DURATION = 4
+BPM = 240
 
 # VIEW METHODS
 def show_note(note, octave):
@@ -24,11 +25,17 @@ def play_note(note, octave, duration):
     show_note(note, octave)
     music.play(constructed_note)
 
-def up_octave(value):
-    OCTAVE += value
+def increase_octave(value):
+    if OCTAVE < 8:
+        OCTAVE += value
+    else:
+        OCTAVE = 8
 
-def down_octave(value):
-    OCTAVE -= value
+def decrease_octave(value):
+    if OCTAVE > 1:
+        OCTAVE -= value
+    else:
+        OCTAVE = 1
 
 def up_duration(value):
     DURATION += value
@@ -36,7 +43,13 @@ def up_duration(value):
 def down_duration(value):
     DURATION -= value
 
-music.set_tempo(ticks=15, bpm=240)
+def up_bpm(value):
+    BPM += value
+
+def down_bpm(value):
+    BPM -= value
+
+music.set_tempo(ticks=15, bpm=BPM)
 
 while True:
     # sets up note pins
@@ -47,6 +60,12 @@ while True:
     G = pin13.is_touched()
     A = pin15.is_touched()
     B = pin16.is_touched()
+
+    up_tempo = button_a.is_pressed()
+    down_tempo = button_b.is_pressed()
+
+    up_octave = pin19.is_touched()
+    down_octave = pin20.is_touched()
 
     # sets up logic for note touches
     if C:
@@ -64,11 +83,23 @@ while True:
     elif B:
         play_note("B", OCTAVE, DURATION)
 
+    # tempo control
+    elif up_tempo:
+        up_bpm(10)
+        display.scroll(BPM)
+        music.set_tempo(ticks=15, bpm=BPM)
+
+    elif down_tempo:
+        down_bpm(10)
+        display.scroll(BPM)
+        music.set_tempo(ticks=15, bpm=BPM)
+
+
     # octave control
-    elif button_a.is_pressed():
-        down_octave(1)
+    elif down_octave:
+        decrease_octave(1)
     elif button_b.is_pressed():
-        up_octave(1)
+        increase_octave(1)
     elif button_a.is_pressed() and button_b.is_pressed():
         display.show(OCTAVE)
     else:
