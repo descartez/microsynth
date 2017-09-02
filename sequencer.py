@@ -38,3 +38,4 @@ while True:
     else:
         display.show(str(sequencer.notes[sequencer.current_note_index]))
 
+# sequencer runs out of memory, can't hold more than a few notes

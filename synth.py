@@ -11,10 +11,16 @@ class Synth():
 
 
     def up_octave(self, value):
-        self.octave += value
+        if self.octave < 8:
+            self.octave += value
+        else:
+            self.octave = 9
 
     def down_octave(self, value):
-        self.octave -= value
+        if self.octave > 1:
+            self.octave -= value
+        else:
+            self.octave = 0
 
     def play_note(self, note):
         music.play((str(note) + str(self.octave) + ":4"))
@@ -25,7 +31,9 @@ music.set_tempo(ticks=15, bpm=synth.tempo)
 
 while True:
     # octave control
-    if button_a.is_pressed():
+    if button_a.is_pressed() and button_b.is_pressed():
+        display.show(str(synth.octave))
+    elif button_a.is_pressed():
         synth.down_octave(1)
         display.show(str(synth.octave))
         synth.play_note("C")
@@ -33,7 +41,5 @@ while True:
         synth.up_octave(1)
         display.show(str(synth.octave))
         synth.play_note("C")
-    elif button_a.is_pressed() and button_b.is_pressed():
-        display.show(synth.octave)
     else:
         display.show(Image.ASLEEP)
