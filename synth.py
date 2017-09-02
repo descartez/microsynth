@@ -16,9 +16,8 @@ class Synth():
     def down_octave(self, value):
         self.octave -= value
 
-    def play_note(note, octave, duration):
-        contructed_note = str(note) + str(octave) + ":" + str(duration)
-        music.play(constructed_note)
+    def play_note(self, note):
+        music.play((str(note) + str(self.octave) + ":4"))
 
 synth = Synth()
 
@@ -29,11 +28,11 @@ while True:
     if button_a.is_pressed():
         synth.down_octave(1)
         display.show(str(synth.octave))
-        synth.play_note("C", 8, 150)
+        synth.play_note("C")
     elif button_b.is_pressed():
         synth.up_octave(1)
         display.show(str(synth.octave))
-        synth.play_note("C", 4, 150)
+        synth.play_note("C")
     elif button_a.is_pressed() and button_b.is_pressed():
         display.show(synth.octave)
     else:
