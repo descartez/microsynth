@@ -27,7 +27,12 @@ class Synth():
 
 synth = Synth()
 
+jingle = ["C4:4","D4:4","E5:4","C6:4"]
+
 music.set_tempo(ticks=15, bpm=synth.tempo)
+
+# starting jingle
+music.play(jingle)
 
 while True:
     # octave control
@@ -37,9 +42,11 @@ while True:
         synth.down_octave(1)
         display.show(str(synth.octave))
         synth.play_note("C")
+        sleep(100)
     elif button_b.is_pressed():
         synth.up_octave(1)
         display.show(str(synth.octave))
         synth.play_note("C")
+        sleep(100)
     else:
         display.show(Image.ASLEEP)
