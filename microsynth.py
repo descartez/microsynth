@@ -38,6 +38,15 @@ while True:
     # octave control
     if button_a.is_pressed() and button_b.is_pressed():
         display.show(str(synth.octave))
+    elif pin1.read_digital():
+        display.show("A")
+        synth.play_note("A")
+    elif pin2.read_digital():
+        display.show("B")
+        synth.play_note("B")
+    elif pin3.read_digital():
+        display.show("C")
+        synth.play_note("C")
     elif button_a.is_pressed():
         synth.down_octave(1)
         display.show(str(synth.octave))
