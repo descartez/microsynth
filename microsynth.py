@@ -47,6 +47,27 @@ while True:
     elif pin3.read_digital():
         display.show("C")
         synth.play_note("C")
+    elif pin8.read_digital():
+        display.show("D")
+        synth.play_note("D")
+    elif pin12.read_digital():
+        display.show("E")
+        synth.play_note("E")
+    elif pin13.read_digital():
+        display.show("E")
+        synth.play_note("E")
+    elif pin15.read_digital():
+        display.show("F")
+        synth.play_note("F")
+    elif pin16.read_digital():
+        display.show("G")
+        synth.play_note("G")
+    elif pin19.read_digital():
+        #ups tempo
+        display.show(Image.NORTH)
+    elif pin20.read_digital():
+        #downs tempo
+        display.show(Image.SOUTH)
     elif button_a.is_pressed():
         synth.down_octave(1)
         display.show(str(synth.octave))
