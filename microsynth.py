@@ -6,7 +6,6 @@ import music
 
 class Synth():
     def __init__(self):
-        self.octave = 4
         self.sustain = 4
         self.tempo = 100
 
@@ -18,12 +17,31 @@ class Synth():
         self.sustain = value
 
     def play_note(self, note):
-        music.play((str(note) + str(self.octave) + ":" + str(self.sustain)))
+        music.play((str(note) ":" + str(self.sustain)))
+
+    def play_pitch(self, freq, sustain):
+        music.pitch(freq, sustain)
+
 
 synth = Synth()
 
 jingle = ["C4:4","D4:4","E5:4","C6:4"]
-notes = ["C","D","E","F","G","A","B"]
+notes = [
+         "C3",
+         "D3",
+         "E3",
+         "F3",
+         "G3",
+         "A3",
+         "B3",
+         "C4",
+         "D4",
+         "E4",
+         "F4",
+         "G4",
+         "A4",
+         "B4",
+         ]
 
 music.set_tempo(ticks=16, bpm=synth.tempo)
 
@@ -31,11 +49,13 @@ music.set_tempo(ticks=16, bpm=synth.tempo)
 music.play(jingle)
 
 while True:
-    # octave control
-    note_index = int((pin1.read_analog() / 1023) * 6)
-    display.show(str(note_index))
-    if button_a.is_pressed():
+    note_index = int((pin1.read_analog() / 1023) * 13)
+    if pin2.read_digital():
         synth.play_note(notes[note_index])
-    if button_b.is_pressed():
+    elif pin3.read_digital():
+        synth.play_pitch(pin1.read_analog(), synth.sustain)
+    elif button_a.is_pressed():
         sustain = int((pin1.read_analog() / 1023) * 8)
         synth.set_sustain(int((pin1.read_analog() / 1023) * 8))
+    else:
+        display.show(Image.HEART_SMALL)
