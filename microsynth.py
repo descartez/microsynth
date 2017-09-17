@@ -9,6 +9,7 @@ class Synth():
         self.octave = 3
         self.sustain = 4
         self.tempo = 100
+        self.musical = True
         self.notes = [
          "C" + str(self.octave),
          "D" + str(self.octave),
@@ -17,13 +18,6 @@ class Synth():
          "G" + str(self.octave),
          "A" + str(self.octave),
          "B" + str(self.octave),
-         "C" + str(self.octave + 1),
-         "D" + str(self.octave + 1),
-         "E" + str(self.octave + 1),
-         "F" + str(self.octave + 1),
-         "G" + str(self.octave + 1),
-         "A" + str(self.octave + 1),
-         "B" + str(self.octave + 1)
          ]
 
     def construct_notes(self):
@@ -35,13 +29,6 @@ class Synth():
          "G" + str(self.octave),
          "A" + str(self.octave),
          "B" + str(self.octave),
-         "C" + str(self.octave + 1),
-         "D" + str(self.octave + 1),
-         "E" + str(self.octave + 1),
-         "F" + str(self.octave + 1),
-         "G" + str(self.octave + 1),
-         "A" + str(self.octave + 1),
-         "B" + str(self.octave + 1)
          ]
 
     def set_octave(self, value):
@@ -51,11 +38,18 @@ class Synth():
     def set_sustain(self, value):
         self.sustain = value
 
-    def play_note(self, note):
+    def play_note(self, note, pitch=""):
         music.play((str(note) + ":" + str(self.sustain)))
 
     def play_pitch(self, freq, sustain):
         music.pitch(freq, sustain)
+
+    def switch_mode(self):
+        if self.musical == False:
+            self.musical = True
+        else:
+            self.musical = False
+
 
 
 synth = Synth()
@@ -68,15 +62,28 @@ music.set_tempo(ticks=16, bpm=synth.tempo)
 music.play(jingle)
 
 while True:
-    note_index = int((pin1.read_analog() / 1023) * 13)
+    note_index = int((pin1.read_analog() / 1023) * 6)
     octave = int((pin4.read_analog() / 1023) * 7)
     tempo = int((pin10.read_analog() / 1023) * 360)
-    pitch = int((pin1.read_analog() / 1023) * 255)
-    if pin2.read_digital():
-        music.set_tempo(ticks=16, bpm=tempo)
-        synth.set_octave(octave)
-        synth.play_note(synth.notes[note_index])
-    elif pin3.read_digital():
-        synth.play_pitch(pitch, synth.sustain)
+    pitch = pin1.read_analog()
+
+
+    if button_a.was_pressed():
+        synth.switch_mode()
+
+    if synth.musical == True:
+        if (pin1.read_analog() > 8):
+            display.show(Image.HEART)
+            music.set_tempo(ticks=16, bpm=tempo)
+            synth.set_octave(octave)
+            synth.play_note(synth.notes[note_index])
+        elif pin3.read_digital():
+            synth.play_pitch(pitch, synth.sustain)
+        else:
+            display.show(Image.HEART_SMALL)
     else:
-        display.show(Image.HEART_SMALL)
+        if (pin1.read_analog() > 8):
+            display.show(Image.HAPPY)
+            synth.play_pitch(pitch, synth.sustain)
+        else:
+            display.show(Image.MEH)
